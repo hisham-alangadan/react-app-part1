@@ -1,0 +1,319 @@
+// PART 0
+
+const Header = (props) => {
+    return (
+      <h1>{props.course}</h1>
+    )
+  }
+  
+  const Part = (props) => {
+    return (
+      <p>{props.part} {props.exercises}.</p>
+    )
+  }
+  
+  const Content = (props) => {
+    return (
+      <>
+        <Part part={props.part1} exercises={props.exercises1} />
+        <Part part={props.part2} exercises={props.exercises2} />
+        <Part part={props.part3} exercises={props.exercises3} />
+      </>
+    )
+  }
+  
+  const Total = (props) => {
+    return (
+      <p>The total number of exercises is {props.tcount}.</p>
+    )
+  }
+  
+  const App = () => {
+    const course = 'Half Stack App Development'
+    const parts = [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10
+      },
+      {
+        name: 'Using Props to Pass Data',
+        exercises: 7
+      },
+      {
+        name: 'State of a Component',
+        exercises: 14
+      }
+    ]
+  
+    return (
+      <div>
+        <Header course={course} />
+        <Content part1={part1} part2={part2} part3={part3} exercises1={exercises1} exercises2={exercises2} exercises3={exercises3} />
+        <Total tcount={exercises1 + exercises2 + exercises3} />
+      </div>
+    )
+  }
+  
+  export default App
+
+
+//  PART 1
+
+import { useState } from "react";
+
+const App = () => {
+  const [value, setValue] = useState(10)
+
+  const setToValue = (value) => () => {
+    console.log('Value now: ', value)
+    setValue(value)
+  }
+
+  return (
+    <>
+      {value}
+      <button onClick={setToValue(1000)}>Thousand</button>
+      <button onClick={setToValue(0)}>Reset</button>
+      <button onClick={setToValue(value + 1)}>Increament</button>
+    </>
+  )
+}
+
+export default App
+
+//  PART 1 EXERCISE 1
+
+import { useState } from "react";
+
+const Button = ({ clickHandler, text}) => {
+  return (
+    <button onClick={clickHandler}>{text}</button>
+  )
+}
+
+const StatisticLine = ({text, count, suffix}) => {
+  return (
+    <>
+      {text}: {count}{suffix} <br />
+    </>
+  )
+}
+
+const Statistics = (props) => {
+  if(props.good + props.neutral + props.bad){
+    return (
+      <>
+        <StatisticLine text='Good' count={props.good} />
+        <StatisticLine text='Neutral' count={props.neutral} />
+        <StatisticLine text='Bad' count={props.bad} />
+        <StatisticLine text='Total' count={props.good + props.neutral + props.bad} />
+        <StatisticLine text='Average' count={(props.good - props.bad) / (props.good + props.neutral + props.bad)} />
+        <StatisticLine text='Positive' count={props.good / (props.good + props.neutral + props.bad)} suffix='%' />
+      </>
+    )
+  }
+  return (
+    <div>No feedback given.</div>
+  )
+}
+
+const App = () => {
+  const [ good, setGood ] = useState(0)
+  const [ neutral, setNeutral ] = useState(0)
+  const [ bad, setBad ] = useState(0)
+
+  const handleGood = () => {
+    setGood(good + 1)
+  }
+
+  const handleNeutral = () => {
+    setNeutral(neutral + 1)
+  }
+
+  const handleBad = () => {
+    setBad(bad + 1)
+  }
+
+  return (
+    <>
+      <h1>Give Feedback</h1>
+      <Button clickHandler={handleGood} text='Good' />
+      <Button clickHandler={handleNeutral} text='Neutral' />
+      <Button clickHandler={handleBad} text='bad' />
+      <p></p>
+      <h2>Statistics</h2>
+      <Statistics good={good} neutral={neutral} bad={bad} />
+    </>
+  )
+}
+
+export default App
+
+// PART 1 EXERCISE 2 (INCOMPLETE)
+
+import { useState } from 'react'
+
+const App = () => {
+  const anecdotes = [
+    'If it hurts, do it more often.',
+    'Adding manpower to a late software project makes it later!',
+    'The first 90 percent of the code accounts for the first 10 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+    'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+    'Premature optimization is the root of all evil.',
+    'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
+    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
+    'The only way to go fast, is to go well.'
+  ]
+   
+  const [selected, setSelected] = useState(0)
+  
+  const [votes, setVotes] = useState({
+    0: 0,
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
+    6: 0,
+    7: 0,
+  })
+
+  const generateNextRandom = () => {
+    const newRandom = Math.floor(Math.random() * 9)
+    setSelected(newRandom)
+  }
+
+  const voteAction = () => {
+    console.log('increamenting ', selected)
+    const newVoteList = {...votes, selected: votes.selected + 1}
+  }
+
+  return (
+    <div>
+      {anecdotes[selected]} <br />
+      <button onClick={generateNextRandom}>Next Anecdote</button>
+      <button onClick={voteAction}>Vote</button>
+      <p>This quote has {votes[selected]} votes.</p>
+      <p>Votes are {votes}</p>
+    </div>
+  )
+}
+
+export default App
+
+
+// PART 2 B
+
+import { useState } from "react";
+
+const App = () => {
+  const [persons, setPersons] = useState([
+    {
+      name: 'Naomisan',
+      phone: '254-518-8857'
+    }
+  ])
+  const [newPerson, setNewPerson] = useState('')
+
+  const handlePersonChange = (event) => {
+    setNewPerson(event.target.value)
+    console.log(event.target.value);
+  }
+
+  const addPerson = (event) => {
+    event.preventDefault()
+    if (persons.find(person => JSON.stringify(person.name) === JSON.stringify(newPerson))) {
+      alert(`${newPerson} is already in the phonebook.`)
+    }
+    else {
+      const newObj = {
+        name: newPerson
+      }
+      setPersons(persons.concat(newObj))
+    }
+    setNewPerson('')
+  }
+
+  return (
+    <>
+      <h2>Phone Book</h2>
+      <form onSubmit={addPerson}>
+        <div>
+          <input value={newPerson} onChange={handlePersonChange} />
+        </div>
+        <div>
+          <button type="submit">Add</button>
+        </div>
+      </form>
+      <h2>Numbers</h2>
+      <ul>
+        {persons.map(person =>
+          <li key={person.name}>
+            {person.name}    {person.phone}
+          </li>
+        )}
+      </ul>
+    </>
+  )
+}
+
+export default App
+
+
+// EXERCISE 2 D (NOT EXERCISE; THE CODE IN MATERIAL)
+
+import { useEffect, useState } from "react";
+import axios, { Axios } from "axios";
+import Note from "./components/Note";
+
+const App = () => {
+  const [notes, setNotes] = useState([])
+  const [newNote, setNewNote] = useState('A new note...')
+
+  const hook = () => {
+    axios
+      .get('http://localhost:3001/notes')
+      .then(response => {
+        console.log('promise fulfilled')
+        setNotes(response.data)
+      })
+  }
+
+  useEffect(hook, [])
+  console.log('rendered', notes.length, 'notes')
+
+  const addNote = (event) => {
+    event.preventDefault()
+    const newObj = {
+      content: newNote,
+      important: Math.random() < 0.5,
+      id: notes.length + 1
+    }
+    setNotes(notes.concat(newObj))
+    setNewNote('')
+  }
+
+  const handleNoteChange = (event) => {
+    console.log(event.target.value)
+    setNewNote(event.target.value)
+  }
+
+  return (
+    <>
+      <h1>Notes</h1>
+      <ul>
+        {notes.map(note =>
+          <Note key={note.id} note={note} />
+        )}
+      </ul>
+      <ul>
+        <form onSubmit={addNote}>
+          <input value={newNote} onChange={handleNoteChange} />
+          <button type="submit">Submit</button>
+        </form>
+      </ul>
+    </>
+  )
+}
+
+export default App
